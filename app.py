@@ -18,11 +18,11 @@ st.set_page_config(
 inject_a2ui_css()
 
 with st.sidebar:
-    st.markdown("## ✈️ PragyanAI")
+    st.markdown("##  PragyanAI")
     st.caption("AGENTIC TRAVEL STUDIO")
     st.divider()
     st.markdown("### 1 · Your trip")
-    destination = st.text_input("Destination", "Kerala")
+    destination = st.text_input("Destination", "Karnataka")
     days = st.number_input("Duration (days)", min_value=1, max_value=30, value=4)
     travelers = st.number_input("Travellers", min_value=1, max_value=20, value=2)
     budget = st.number_input("Target budget (₹)", min_value=1000, value=30000, step=1000)
@@ -42,7 +42,7 @@ with st.sidebar:
         help="Choose the layout that best matches what you want to explore.",
     )
     st.caption(DASHBOARD_OPTIONS[dashboard_type]["description"])
-    run = st.button("✨ Create my dashboard", type="primary", use_container_width=True)
+    run = st.button("Create my dashboard", type="primary", use_container_width=True)
     st.divider()
     st.caption("LangGraph · Groq · A2UI-style component renderer")
 
@@ -81,13 +81,13 @@ if run:
     graph = build_travel_graph(settings)
     with st.status("Your AI travel team is working...", expanded=True) as status:
         try:
-            st.write("🔧 Preparing travel tools")
-            st.write("🔎 Destination research agent")
-            st.write("🗓️ Itinerary planning agent")
-            st.write("💰 Budget analysis agent")
-            st.write("⭐ Recommendation agent")
+            st.write("1. Preparing travel tools")
+            st.write("2. Destination research agent")
+            st.write("3. Itinerary planning agent")
+            st.write("4. Budget analysis agent")
+            st.write("5. Recommendation agent")
             result = graph.invoke(initial_state)
-            st.write(f"🎨 Creating your **{dashboard_type}**")
+            st.write(f" Creating your **{dashboard_type}**")
             spec = build_ui_spec(result, dashboard_type=dashboard_type)
             st.session_state["travel_result"] = result
             st.session_state["a2ui_spec"] = spec
@@ -118,7 +118,7 @@ if "travel_result" in st.session_state:
             st.session_state["selected_dashboard_type"] = selected_view
             st.rerun()
 
-    tabs = st.tabs(["✨ Dashboard", "🧭 Research", "🗓️ Itinerary", "💳 Budget", "🌟 Recommendations", "🧩 A2UI JSON"])
+    tabs = st.tabs(["1. Dashboard", "2. Research", "3. Itinerary", "4. Budget", "5. Recommendations", "6. A2UI JSON"])
     with tabs[0]:
         render_a2ui(st.session_state["a2ui_spec"])
     with tabs[1]:
