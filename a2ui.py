@@ -28,8 +28,12 @@ def _clean(value: Any, limit: int = 12000) -> str:
         return ""
     return str(value)[:limit]
 
-def _extract_budget_numbers(text: str) -> dict[str, float]:
-    """Best-effort extraction of INR category totals from agent text."""
+
+def _extract_budget_numbers(text: Any) -> dict[str, float]:
+    """Safely extract INR category amounts; return {} if no usable values exist."""
+    if not isinstance(text, str) or not text.strip():
+        return {}
+
     labels = {
         "Transport": r"(?:intercity\s+)?transport",
         "Accommodation": r"accommodation|hotel|stay",
@@ -38,19 +42,33 @@ def _extract_budget_numbers(text: str) -> dict[str, float]:
         "Activities": r"activities|entry\s+fees",
         "Miscellaneous": r"miscellaneous|buffer",
     }
-    result = {}
+    result: dict[str, float] = {}
+
     for label, pattern in labels.items():
-        # Match a label followed within a short distance by an INR amount.
-        match = re.search(
-            pattern + r"[^₹\n]{0,45}₹?\s*([\d,]+(?:\.\d+)?)",
-            text,
-            flags=re.IGNORECASE,
+        # Accept common formats: ₹12,500; INR 12500; 12500
+        # The amount is a named group, so other regex groups cannot shift its index.
+        amount_pattern = (
+            r"(?:" + pattern + r")"
+            r"[^₹\n]{0,80}?"
+            r"(?:₹|INR\s*)?\s*(?P<amount>\d[\d,]*(?:\.\d+)?)"
         )
-        if match:
-            try:
-                result[label] = float(match.group(1).replace(",", ""))
-            except ValueError:
-                pass
+        match = re.search(amount_pattern, text, flags=re.IGNORECASE)
+
+        if not match:
+            continue
+
+        raw_amount = match.groupdict().get("amount")
+        if not raw_amount:
+            continue
+
+        try:
+            value = float(raw_amount.replace(",", ""))
+        except (TypeError, ValueError):
+            continue
+
+        if value >= 0:
+            result[label] = value
+
     return result
 
 def build_ui_spec(result: dict[str, Any]) -> dict[str, Any]:
@@ -254,3 +272,4 @@ def render_a2ui(spec: dict[str, Any]) -> None:
         else:
             # Unknown component types are safely skipped rather than executed.
             st.warning(f"Unsupported A2UI component type: {component.type}")
+
