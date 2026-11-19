@@ -9,7 +9,7 @@ st.set_page_config(
     layout="wide",
 )
 
-st.title("✈️ Agentic AI Travel Planner")
+st.title(" PragyanAI -Agentic AI Travel Planner")
 st.caption("Streamlit · LangGraph · Groq · MCP-style tools · A2UI")
 st.write(
     "Plan a trip with specialist AI agents for destination research, "
@@ -33,7 +33,7 @@ with st.sidebar:
         "Nature, local food, less crowded destinations",
         height=110,
     )
-    run = st.button("🚀 Generate travel plan", type="primary", use_container_width=True)
+    run = st.button(" Generate travel plan", type="primary", use_container_width=True)
 
 if run:
     if not destination.strip():
@@ -73,12 +73,12 @@ if "travel_result" in st.session_state:
     spec = st.session_state.get("a2ui_spec") or build_ui_spec(result)
 
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
-        "📊 A2UI Dashboard",
-        "🔎 Destination Research",
-        "🗺️ Itinerary",
-        "💰 Budget",
-        "⭐ Recommendations",
-        "⚙️ Workflow & JSON",
+        "1. A2UI Dashboard",
+        "2. Destination Research",
+        "3. Itinerary",
+        "4. Budget",
+        "5. Recommendations",
+        "6. Workflow & JSON",
     ])
 
     with tab1:
