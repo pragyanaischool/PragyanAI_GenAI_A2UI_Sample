@@ -26,7 +26,7 @@ with st.sidebar:
         "Nature, local food, less crowded destinations",
         height=110,
     )
-    run = st.button("✨ Generate my travel plan", type="primary", use_container_width=True)
+    run = st.button(" Generate my travel plan", type="primary", use_container_width=True)
     st.divider()
     st.caption("Powered by LangGraph · Groq · A2UI-style renderer")
 
@@ -65,13 +65,13 @@ if run:
     graph = build_travel_graph(settings)
     with st.status("Your AI travel team is working...", expanded=True) as status:
         try:
-            st.write("🔧 Preparing travel tools")
-            st.write("🔎 Destination research agent")
-            st.write("🗺️ Itinerary planning agent")
-            st.write("💰 Budget analysis agent")
-            st.write("⭐ Recommendation agent")
+            st.write("1. Preparing travel tools")
+            st.write("2. Destination research agent")
+            st.write("3. Itinerary planning agent")
+            st.write("4. Budget analysis agent")
+            st.write("5. Recommendation agent")
             result = graph.invoke(initial_state)
-            st.write("🎨 Building dynamic A2UI dashboard")
+            st.write(" Building dynamic A2UI dashboard")
             spec = build_ui_spec(result)
             st.session_state["travel_result"] = result
             st.session_state["a2ui_spec"] = spec
@@ -84,7 +84,7 @@ if "travel_result" in st.session_state:
     result = st.session_state["travel_result"]
     spec = st.session_state["a2ui_spec"]
 
-    tabs = st.tabs(["✨ Overview", "🧭 Research", "🗓️ Itinerary", "💳 Budget", "🌟 Recommendations", "🧩 A2UI JSON"])
+    tabs = st.tabs(["1. Overview", "2. Research", "3. Itinerary", "4. Budget", "5. Recommendations", "6. A2UI JSON"])
     with tabs[0]:
         render_a2ui(spec)
     with tabs[1]:
